@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include <math.h>
 
-#define DEFAULT_PORTIONS 2.0
-#define EPSILON 0.00001
+#define DEFAULT_PORTIONS 2
 
 int main(int argc, const char * * argv)
 {
-    double portions = (argc > 1) ? strtol(argv[1], NULL, 10) : DEFAULT_PORTIONS;
+    long portions = (argc > 1) ? strtol(argv[1], NULL, 10) : DEFAULT_PORTIONS;
 
     char * line = NULL;
     size_t line_size = 0;
@@ -17,15 +16,13 @@ int main(int argc, const char * * argv)
     }
     line_len--; // NUL character
 
-    double segment_len = line_len / portions;
-
-    if ((segment_len - floor(segment_len)) > (EPSILON * segment_len)) {
-        putchar(*line++);
-        segment_len = floor(segment_len);
-    }
+    int portion_len = line_len / portions;
 
     for (int i = 0; i < portions; i++) {
-        for (int j = 0; j < segment_len; j++) {
+        if (i < line_len % portions) {
+            putchar(*line++);
+        }
+        for (int j = 0; j < portion_len; j++) {
             putchar(*line++);
         }
         putchar(' ');
